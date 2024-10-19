@@ -209,7 +209,7 @@ After=network.target
 
 [Service]
 User=$USERNAME
-ExecStart=$BIN_PATH/story-geth --iliad --syncmode full --authrpc.port ${STORY_PORT}51 --port ${STORY_PORT}03 --discovery.port ${STORY_PORT}03
+ExecStart=$BIN_PATH/story-geth --iliad --syncmode full --authrpc.port ${STORY_PORT}51 --port ${STORY_PORT}03 --discovery.port ${STORY_PORT}03 --metrics --pprof
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=65536
