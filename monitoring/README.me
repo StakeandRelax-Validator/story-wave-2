@@ -5,9 +5,28 @@ A docker compose repository with some usefull script to
 - Delete service
 - Delete all the containers (useful for configuration changes)
 
-- https://github.com/StakeandRelax-Validator/story-wave-2/tree/main/monitoring
-
 - Embedded there are 3 dashboars:
 - - geth dashoboard (user needs to enable metrics on geth service)
   - node_exporter dashboard
   - story dashboard (based on tendermint, user need to enable prometheua on .story/story/config/config.toml)
+
+
+Before all, create a .env file using .env.sample as example
+Second step, edit prometheus.yml if you have different port on validator node
+
+Enable prometheus with tendermint metrics
+
+sed -i -e "s|prometheus = false|prometheus = true|g" $HOME/.story/story/config/config.toml
+sed -i -e "s|namespace = \"[^\"]*\"|namespace = \"tendermint\"|g" $HOME/.story/story/config/config.toml
+
+Enable metrics on geth service, adding these 2 parameter to the ExecStart line: --metrics --pprof
+
+To install
+
+git clone https://github.com/StakeandRelax-Validator/story-wave-2/monitoring
+cd monitoring
+./install_start_monitoring.sh
+
+Grafana will be avaiable on port 3000
+To redierct the port plus https use nginx + certbot
+
