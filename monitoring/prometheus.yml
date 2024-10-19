@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  - job_name: "node"
+    static_configs:
+      - targets: ["localhost:9100"]
+
+  - job_name: "story"
+    static_configs:
+      - targets: ["localhost:25561"]
+
+  - job_name: "geth"
+    metrics_path: "/debug/metrics/prometheus"
+    static_configs:
+      - targets: ["localhost:6060"]

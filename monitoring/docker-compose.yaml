@@ -1,0 +1,44 @@
+version: '3.8'
+
+
+volumes:
+  grafana-data:
+
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    network_mode: host
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    env_file:
+      - .env
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+    restart: unless-stopped
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - "./datasources:/etc/grafana/provisioning/datasources"
+      - "./dashboards:/etc/grafana/provisioning/dashboards"
+    network_mode: host
+    expose:
+      - 3000
+
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    command: --collector.processes --collector.cpu.info
+    container_name: node-exporter
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    expose:
+      - 9100
